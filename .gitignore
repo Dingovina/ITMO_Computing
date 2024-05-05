@@ -1,6 +1,7 @@
 .idea
 .gradle
-build/
+gradle
+build
 gradlew
 gradlew.bat
 client/build
