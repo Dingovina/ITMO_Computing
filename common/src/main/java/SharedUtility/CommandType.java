@@ -1,0 +1,19 @@
+package SharedUtility;
+
+public enum CommandType {
+    ADD, CLEAR,
+    COUNT_BY_DESCRIPTION,
+    COUNT_LESS_THAN_GENRE,
+    EXECUTE_SCRIPT,
+    EXIT,
+    HELP,
+    HISTORY,
+    INFO,
+    PRINT_FIELD_ASCENDING_DESCRIPTION,
+    REMOVE_BY_ID,
+    REMOVE_FIRST,
+    REMOVE_LOWER,
+    SHOW,
+    UPDATE,
+    SAVE;
+}
