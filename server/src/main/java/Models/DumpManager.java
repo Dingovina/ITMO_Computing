@@ -9,87 +9,52 @@ import java.io.File;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 import java.util.Scanner;
 
 public class DumpManager {
-    private String fileName;
-    private Scanner input;
 
-    public DumpManager(String fileName, Scanner input) {
-        this.fileName = fileName;
-        this.input = input;
+private Connection connection;
+
+    public DumpManager(Connection c){
+        connection = c;
     }
 
     public PriorityQueue<MusicBand> readCollection(){
         PriorityQueue<MusicBand> collection = new PriorityQueue<>();
         try {
-            File file = new File(fileName);
-            if (file.length() == 0){
-                PrintStream printStream = new PrintStream(fileName);
-                printStream.println("[]");
-                printStream.close();
-            }
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.findAndRegisterModules();
-
-            String content = new String(Files.readAllBytes(Paths.get(file.toURI())));
-            JSONArray jarray = new JSONArray(content);
-
-            HashSet<Long> id_list = new HashSet<>();
-            for (int i=0;i<jarray.length();i++){
-                JSONObject jband = jarray.getJSONObject(i);
-                MusicBand band = objectMapper.readValue(jband.toString(), MusicBand.class);
-                if (band.valid() && !id_list.contains(band.getId())) {
+            Statement st = connection.createStatement();
+            ResultSet data = st.executeQuery("SELECT * FROM MusicBand;");
+            while (data.next()) {
+                String str_band = "";
+                for (int i = 1; i < 18; ++i){
+                    str_band += data.getString(i) + "\n";
+                }
+                Scanner in = new Scanner(str_band);
+                MusicBand band = new MusicBand();
+                if (!band.load_data(in)){
+                    System.out.println("Error while loading MusicBand.");
+                }
+                else{
                     collection.add(band);
-                    id_list.add(band.getId());
-                }
-                else {
-                    System.out.println("В файле содержится некорректный объект.");
-                    System.exit(0);
                 }
             }
+
+            data.close();
+            st.close();
         } catch (Exception e) {
             System.out.println(e);
-            System.out.println("Ошибка при чтении файла.");
+            System.out.println("Error while reading the database");
             System.exit(0);
         }
         return collection;
     }
 
-    public void writeCollection(PriorityQueue<MusicBand> collection) {
-        try {
-            PrintStream printStream = new PrintStream(fileName);
-            JSONArray jsonCollection = new JSONArray();
-            for (var band : collection){
-                JSONObject jsonBand = new JSONObject(band);
-                jsonCollection.put(jsonBand);
-            }
-            printStream.println(jsonCollection);
-            System.out.println("Коллекция успешна сохранена в файл!");
-        } catch (Exception exception) {
-            System.out.println("Загрузочный файл не может быть открыт!");
-            System.out.println("Введите название другого файла для переноса коллекции: ");
-            String newFileName = input.nextLine().strip();
-            writeCollection(collection, newFileName);
-        }
-    }
-
-    public void writeCollection(PriorityQueue<MusicBand> collection, String savingFileName) {
-        try {
-            PrintStream printStream = new PrintStream(savingFileName);
-            JSONArray jsonCollection = new JSONArray();
-            for (var band : collection){
-                JSONObject jsonBand = new JSONObject(band);
-                jsonCollection.put(jsonBand);
-            }
-
-            fileName = savingFileName;
-            printStream.println(jsonCollection);
-            System.out.println("Коллекция успешна сохранена в файл!");
-        } catch (Exception exception) {
-            System.out.println("Загрузочный файл не может быть открыт!");
-        }
+    public Connection getConnection(){
+        return connection;
     }
 }

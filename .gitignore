@@ -7,3 +7,4 @@ gradlew.bat
 client/build
 common/build
 server/build
+db.cfg

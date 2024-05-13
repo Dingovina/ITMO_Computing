@@ -8,6 +8,7 @@ import Utility.Command;
 import SharedUtility.MusicGenre;
 import Commands.*;
 
+import java.sql.Connection;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
@@ -22,28 +23,30 @@ public class CollectionManager {
         this.dumpManager = dumpManager;
         this.bands = dumpManager.readCollection();
         creationDate = java.time.ZonedDateTime.now();
-        commands_list.add(new Add(this));
-        commands_list.add(new Clear(this));
+        commands_list.add(new Add(dumpManager.getConnection()));
+        commands_list.add(new Clear(dumpManager.getConnection()));
         commands_list.add(new CountByDescription(this));
         commands_list.add(new Help(this));
         commands_list.add(new History(this));
         commands_list.add(new Info(this));
         commands_list.add(new PrintFieldAscendingDescription(this));
-        commands_list.add(new RemoveById(this));
-        commands_list.add(new RemoveFirst(this));
-        commands_list.add(new RemoveLower(this));
+        commands_list.add(new RemoveById(dumpManager.getConnection()));
+        commands_list.add(new RemoveFirst(dumpManager.getConnection()));
+        commands_list.add(new RemoveLower(dumpManager.getConnection()));
         commands_list.add(new Save(this));
         commands_list.add(new Show(this));
-        commands_list.add(new Update(this));
+        commands_list.add(new Update(dumpManager.getConnection()));
     }
 
     public Response call(Request request){
         for (Command command : commands_list){
             if (command.getCommandType().equals(request.getCommandType())){
-                return command.execute(request.getArguments());
+                Response r = command.execute(request.getArguments());
+                save();
+
+                return r;
             }
         }
-        save();
         return new Response(ResponseStatus.ERROR, "Command not found.");
     }
 
@@ -93,15 +96,6 @@ public class CollectionManager {
         return new Response(ResponseStatus.OK, message);
     }
 
-    public Response add(MusicBand band){
-        last_commands.add("add");
-        String message = "";
-        bands.add(band);
-        message += "Группа была добавлена в коллекцию.\n";
-
-        return new Response(ResponseStatus.OK, message);
-    }
-
     public Response update(long id, MusicBand newBand){
         last_commands.add("update");
         String message = "";
@@ -120,7 +114,6 @@ public class CollectionManager {
             return new Response(ResponseStatus.ERROR, message);
         }
         return new Response(ResponseStatus.OK, message);
-
     }
 
     public Response remove_by_id(long id){
@@ -153,7 +146,7 @@ public class CollectionManager {
     }
 
     public Response save(){
-        dumpManager.writeCollection(bands);
+        bands = dumpManager.readCollection();
         return new Response(ResponseStatus.OK, "Collection saved.");
     }
     public Response remove_first(){

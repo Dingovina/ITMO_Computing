@@ -5,13 +5,16 @@ import SharedModels.Response;
 import SharedUtility.CommandType;
 import SharedUtility.ResponseStatus;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Scanner;
+import java.nio.charset.StandardCharsets;
+import java.sql.*;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         InetAddress host = null;
         Integer port = null;
         try {

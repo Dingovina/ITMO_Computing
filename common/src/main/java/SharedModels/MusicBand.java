@@ -4,6 +4,8 @@ import SharedUtility.Inputable;
 import SharedUtility.MusicGenre;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -11,7 +13,6 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable {
-    private static HashSet<Long> id_list = new HashSet<>();
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
     private Coordinates coordinates; //Поле не может быть null
@@ -21,36 +22,26 @@ public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable
     private String description; //Поле может быть null
     private MusicGenre genre; //Поле не может быть null
     private Person frontMan; //Поле может быть null
-    private long find_mex(){
-        long mex = 0;
-        for (long el : id_list){
-            if (mex == el) mex++;
-            else return mex;
-        }
-        return mex;
-    }
 
     public MusicBand(){
-        id = find_mex();
-        id_list.add(id);
+        id = -1L;
         creationDate = ZonedDateTime.now();
         coordinates = new Coordinates();
         frontMan = new Person();
     }
 
-    public boolean valid(){
-        if (name == null || name.isEmpty()) return false;
-        if (!coordinates.valid()) return false;
-        if (numberOfParticipants < 1) return false;
-        if (albumsCount == null || albumsCount < 1) return false;
-        if (description == null || description.isEmpty()) return false;
-        if (genre == null) return false;
-        if (!frontMan.valid()) return false;
-        return true;
-    }
-
-    public void read_data(Scanner scan){
+    public boolean load_data(Scanner scan){
+        try{
+            id = scan.nextLong();
+            scan.nextLine();
+            creationDate = ZonedDateTime.of(LocalDateTime.parse(scan.nextLine().split("\\.")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), ZoneId.systemDefault());
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            System.out.println("Ошибка при загрузке MusicBand.");
+            return false;
+        }
         input_data(scan, true);
+        return true;
     }
 
     @Override
@@ -130,22 +121,22 @@ public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable
                 System.out.println(i + 1 + " - " + MusicGenre.values()[i]);
             }
         }
-        int i = 0;
+        MusicGenre g = MusicGenre.MATH_ROCK;
+        String i = "";
         do {
             if (!is_reading)
-                System.out.println("Введите число, соответствующее жанру группы: ");
+                System.out.println("Введите жанр группы: ");
             try{
-                i = input.nextInt();
-            } catch (InputMismatchException e){
-                input.nextLine();
-                i = 0;
+                i = input.nextLine();
+                g = MusicGenre.valueOf(i);
+            } catch (Exception e){
+                i = "";
             }
-            if (i < 1 || i > MusicGenre.values().length && !is_reading) System.out.println("Необходимо ввести целое число от 1 до " + MusicGenre.values().length);
-        } while (i < 1 || i > MusicGenre.values().length && !is_reading);
-        input.nextLine();
+            if (i.isEmpty() && !is_reading) System.out.println("Необходимо ввести жанр");
+        } while (i.isEmpty() && !is_reading);
 
         try {
-            genre = MusicGenre.values()[i - 1];
+            genre = g;
         } catch (IndexOutOfBoundsException ignored){}
     }
 

@@ -74,22 +74,22 @@ public class Person implements Inputable, Serializable {
                 System.out.println(i + 1 + " - " + Color.values()[i]);
             }
         }
-        int i = 0;
+        String i = "";
+        Color c = Color.BLACK;
         do {
             if (!is_reading)
-                System.out.println("Введите число, соответствующее цвету глаз солиста: ");
+                System.out.println("Введите цвет глаз солиста: ");
             try{
-                i = input.nextInt();
-            } catch (InputMismatchException e){
-                input.nextLine();
-                i = 0;
+                i = input.nextLine();
+                c = Color.valueOf(i);
+            } catch (Exception e){
+                i = "";
             }
-            if (i < 1 || i > Color.values().length && !is_reading) System.out.println("Необходимо ввести целое число от 1 до " + Color.values().length);
-        } while (i < 1 || i > Color.values().length && !is_reading);
-        input.nextLine();
+            if (i.isEmpty() && !is_reading) System.out.println("Необходимо ввести цвет");
+        } while (i.isEmpty() && !is_reading);
 
         try {
-            eyeColor = Color.values()[i - 1];
+            eyeColor = c;
         } catch (IndexOutOfBoundsException ignored){}
     }
 
@@ -100,22 +100,22 @@ public class Person implements Inputable, Serializable {
                 System.out.println(i + 1 + " - " + Color.values()[i]);
             }
         }
-        int i = 0;
+        String i = "";
+        Color c = Color.BLACK;
         do {
             if (!is_reading)
-                System.out.println("Введите число, соответствующее цвету волос солиста: ");
+                System.out.println("Введите цвет волос солиста: ");
             try{
-                i = input.nextInt();
-            } catch (InputMismatchException e){
-                input.nextLine();
-                i = 0;
+                i = input.nextLine();
+                c = Color.valueOf(i);
+            } catch (Exception e){
+                i = "";
             }
-            if (i < 1 || i > Color.values().length && !is_reading) System.out.println("Необходимо ввести целое число от 1 до " + Color.values().length);
-        } while (i < 1 || i > Color.values().length && !is_reading);
-        input.nextLine();
+            if (i.isEmpty() && !is_reading) System.out.println("Необходимо ввести цвет");
+        } while (i.isEmpty() && !is_reading);
 
         try {
-            hairColor = Color.values()[i - 1];
+            hairColor = c;
         } catch (IndexOutOfBoundsException ignored){}
     }
 
@@ -126,22 +126,22 @@ public class Person implements Inputable, Serializable {
                 System.out.println(i + 1 + " - " + Country.values()[i]);
             }
         }
-        int i = 0;
+        String i = "";
+        Country c = Country.USA;
         do {
             if (!is_reading)
-                System.out.println("Введите число, соответствующее родной стране солиста: ");
+                System.out.println("Введите страну солиста: ");
             try{
-                i = input.nextInt();
-            } catch (InputMismatchException e){
-                input.nextLine();
-                i = 0;
+                i = input.nextLine();
+                c = Country.valueOf(i);
+            } catch (Exception e){
+                i = "";
             }
-            if (i < 1 || i > Country.values().length && !is_reading) System.out.println("Необходимо ввести целое число от 1 до " + Country.values().length);
-        } while (i < 1 || i > Country.values().length && !is_reading);
-        input.nextLine();
+            if (i.isEmpty() && !is_reading) System.out.println("Необходимо ввести страну");
+        } while (i.isEmpty() && !is_reading);
 
         try {
-            nationality = Country.values()[i - 1];
+            nationality = c;
         }catch (IndexOutOfBoundsException ignored){}
     }
 
