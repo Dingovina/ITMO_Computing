@@ -50,7 +50,12 @@ public class Client {
             disconnectFromServer();
             return response;
         } catch (Exception e){
-            System.out.println(e);
+            try {
+                disconnectFromServer();
+            } catch (Exception er){
+                serverWriter = null;
+                return new Response(ResponseStatus.ERROR, "Сервер не доступен!");
+            }
             return new Response(ResponseStatus.ERROR, "Ошибка при отправке запроса.");
         }
     }

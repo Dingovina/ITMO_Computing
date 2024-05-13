@@ -8,9 +8,9 @@ tasks.jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
-tasks.withType<JavaCompile> {
-    options.encoding = "UTF-8"
-}
+//tasks.withType<JavaCompile> {
+//    options.encoding = "UTF-8"
+//}
 
 
 group = "org.example"
@@ -26,5 +26,6 @@ dependencies {
     implementation("org.apache.logging.log4j:log4j-api:2.20.0")
     implementation("org.apache.logging.log4j:log4j-core:2.20.0")
     implementation("org.apache.logging.log4j:log4j-slf4j2-impl:2.20.0")
+    implementation("org.postgresql:postgresql:42.7.3")
     implementation(project(mapOf("path" to ":common")))
 }

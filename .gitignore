@@ -1,5 +1,6 @@
 .idea
 .gradle
+db.cfg
 gradle
 build
 gradlew

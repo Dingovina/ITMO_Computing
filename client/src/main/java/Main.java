@@ -6,12 +6,10 @@ import SharedUtility.CommandType;
 import SharedUtility.ResponseStatus;
 
 import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         InetAddress host = null;
         Integer port = null;
         try {

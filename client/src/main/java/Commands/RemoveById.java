@@ -14,7 +14,7 @@ public class RemoveById extends Command {
     @Override
     public ArrayList<Object> getArgs(String arguments){
         ArrayList<Object> args = new ArrayList<>();
-        args.add(Integer.parseInt(arguments));
+        args.add(Long.parseLong(arguments));
         return args;
     }
 
