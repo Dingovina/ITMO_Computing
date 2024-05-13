@@ -1,5 +1,6 @@
 .idea
 .gradle
+db.cfg
 gradle
 build
 gradlew
@@ -7,4 +8,3 @@ gradlew.bat
 client/build
 common/build
 server/build
-.cfg
