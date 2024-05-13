@@ -5,7 +5,6 @@ import SharedModels.Response;
 import SharedUtility.CommandType;
 import SharedUtility.ResponseStatus;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.util.*;
 

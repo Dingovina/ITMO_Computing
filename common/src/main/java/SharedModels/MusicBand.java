@@ -139,17 +139,6 @@ public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable
         } catch (IndexOutOfBoundsException ignored){}
     }
 
-    public void update(MusicBand band){
-        System.out.println("Начинаем обновление группы.");
-        this.name = band.name;
-        this.genre = band.genre;
-        this.frontMan = band.frontMan;
-        this.albumsCount = band.albumsCount;
-        this.numberOfParticipants = band.numberOfParticipants;
-        this.coordinates = band.coordinates;
-        this.description = band.description;
-    }
-
     @Override
     public int compareTo(MusicBand other_band) {
         return this.id.compareTo(other_band.id);
@@ -168,10 +157,6 @@ public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable
                 "\"genre\": \"" + genre + "\",\n" +
                 "\"frontMan\": " + frontMan + "\n" +
                 "}";
-    }
-
-    public long getId() {
-        return id;
     }
 
     public String getDescription(){

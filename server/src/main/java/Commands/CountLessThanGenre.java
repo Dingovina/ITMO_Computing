@@ -10,7 +10,7 @@ import SharedUtility.MusicGenre;
 import java.util.ArrayList;
 
 public class CountLessThanGenre extends Command {
-    private CollectionManager manager;
+    private final CollectionManager manager;
     public CountLessThanGenre(CollectionManager manager) {
         super("count_less_than_genre", CommandType.COUNT_LESS_THAN_GENRE);
         this.manager = manager;
