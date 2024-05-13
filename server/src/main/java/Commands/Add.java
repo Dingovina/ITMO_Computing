@@ -1,6 +1,5 @@
 package Commands;
 
-import Models.CollectionManager;
 import SharedModels.MusicBand;
 import SharedModels.Response;
 import SharedUtility.ResponseStatus;
@@ -23,24 +22,25 @@ public class Add extends Command {
             MusicBand band = (MusicBand) args.get(0);
 
             PreparedStatement st = connection.prepareStatement(
-                    "INSERT INTO MusicBand(name,\n" +
-                    "    coordinate_x,\n" +
-                    "    coordinate_y,\n" +
-                    "    creationDate,\n" +
-                    "    numberOfParticipants,\n" +
-                    "    albumsCount,\n" +
-                    "    description,\n" +
-                    "    genre,\n" +
-                    "    frontMan_name,\n" +
-                    "    frontMan_weight,\n" +
-                    "    frontMan_eyeColor,\n" +
-                    "    frontMan_hairColor,\n" +
-                    "    frontMan_nationality,\n" +
-                    "    frontMan_location_x,\n" +
-                    "    frontMan_location_y,\n" +
-                    "    frontMan_location_name)\n" +
-                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)\n" +
-                    "RETURNING id;"
+                    """
+                            INSERT INTO MusicBand(name,
+                                coordinate_x,
+                                coordinate_y,
+                                creationDate,
+                                numberOfParticipants,
+                                albumsCount,
+                                description,
+                                genre,
+                                frontMan_name,
+                                frontMan_weight,
+                                frontMan_eyeColor,
+                                frontMan_hairColor,
+                                frontMan_nationality,
+                                frontMan_location_x,
+                                frontMan_location_y,
+                                frontMan_location_name)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            RETURNING id;"""
             );
             st.setString(1, band.getName());
             st.setDouble(2, band.getCoordinates().getX());

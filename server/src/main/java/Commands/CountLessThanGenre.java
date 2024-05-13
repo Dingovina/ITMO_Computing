@@ -16,9 +16,6 @@ public class CountLessThanGenre extends Command {
         this.manager = manager;
     }
 
-    public void execute(MusicGenre genre) {
-
-    }
 
     @Override
     public Response execute(ArrayList<Object> args) {

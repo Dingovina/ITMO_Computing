@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -122,7 +121,7 @@ public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable
             }
         }
         MusicGenre g = MusicGenre.MATH_ROCK;
-        String i = "";
+        String i;
         do {
             if (!is_reading)
                 System.out.println("Введите жанр группы: ");

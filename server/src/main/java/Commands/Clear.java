@@ -1,6 +1,5 @@
 package Commands;
 
-import Models.CollectionManager;
 import SharedModels.Response;
 import SharedUtility.ResponseStatus;
 import Utility.Command;
@@ -12,7 +11,7 @@ import java.util.ArrayList;
 
 public class Clear extends Command {
 
-    private Connection connection;
+    private final Connection connection;
     public Clear(Connection connection) {
         super("clear", CommandType.CLEAR);
         this.connection = connection;

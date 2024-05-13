@@ -1,6 +1,5 @@
 package Commands;
 
-import Models.CollectionManager;
 import SharedModels.MusicBand;
 import SharedModels.Response;
 import SharedUtility.ResponseStatus;
@@ -14,7 +13,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 
 public class Update extends Command {
-    private Connection connection;
+    private final Connection connection;
     public Update(Connection connection) {
         super("update", CommandType.UPDATE);
         this.connection = connection;
@@ -26,25 +25,10 @@ public class Update extends Command {
             long id = (Long) args.get(0);
             MusicBand band = (MusicBand) args.get(1);
             PreparedStatement st = connection.prepareStatement(
-                    "UPDATE MusicBand " +
-                        "SET name = ?, " +
-                        "    coordinate_x = ?," +
-                        "    coordinate_y = ?," +
-                        "    creationDate = ?," +
-                        "    numberOfParticipants = ?," +
-                        "    albumsCount = ?," +
-                        "    description = ?," +
-                        "    genre = ?," +
-                        "    frontMan_name = ?," +
-                        "    frontMan_weight = ?," +
-                        "    frontMan_eyeColor = ?," +
-                        "    frontMan_hairColor = ?," +
-                        "    frontMan_nationality = ?," +
-                        "    frontMan_location_x = ?," +
-                        "    frontMan_location_y = ?," +
-                        "    frontMan_location_name = ?\n" +
-                        "WHERE id = ?\n" +
-                        "RETURNING id;"
+                    """
+                            UPDATE MusicBand SET name = ?,     coordinate_x = ?,    coordinate_y = ?,    creationDate = ?,    numberOfParticipants = ?,    albumsCount = ?,    description = ?,    genre = ?,    frontMan_name = ?,    frontMan_weight = ?,    frontMan_eyeColor = ?,    frontMan_hairColor = ?,    frontMan_nationality = ?,    frontMan_location_x = ?,    frontMan_location_y = ?,    frontMan_location_name = ?
+                            WHERE id = ?
+                            RETURNING id;"""
             );
             st.setString(1, band.getName());
             st.setDouble(2, band.getCoordinates().getX());

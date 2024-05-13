@@ -11,7 +11,7 @@ public class Main {
     public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
         int port = -1;
         Scanner input = new Scanner(System.in);
-        ConnectionManager connectionManager = null;
+        ConnectionManager connectionManager;
         DumpManager dumpManager = null;
         CollectionManager collectionManager = null;
         try{

@@ -20,15 +20,6 @@ public class Person implements Inputable, Serializable {
         location = new Location();
     }
 
-    public boolean valid(){
-        if (name == null || name.isEmpty()) return false;
-        if (weight == null || weight < 1) return false;
-        if (eyeColor == null) return false;
-        if (hairColor == null) return false;
-        if (nationality == null) return false;
-        if (location == null || !location.valid()) return false;
-        return true;
-    }
     @Override
     public void input_data(Scanner scan, boolean is_reading) {
         input_name(scan, is_reading);
@@ -74,7 +65,7 @@ public class Person implements Inputable, Serializable {
                 System.out.println(i + 1 + " - " + Color.values()[i]);
             }
         }
-        String i = "";
+        String i;
         Color c = Color.BLACK;
         do {
             if (!is_reading)
@@ -100,7 +91,7 @@ public class Person implements Inputable, Serializable {
                 System.out.println(i + 1 + " - " + Color.values()[i]);
             }
         }
-        String i = "";
+        String i;
         Color c = Color.BLACK;
         do {
             if (!is_reading)
@@ -126,7 +117,7 @@ public class Person implements Inputable, Serializable {
                 System.out.println(i + 1 + " - " + Country.values()[i]);
             }
         }
-        String i = "";
+        String i;
         Country c = Country.USA;
         do {
             if (!is_reading)

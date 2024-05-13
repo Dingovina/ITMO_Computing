@@ -1,6 +1,5 @@
 package Commands;
 
-import Models.CollectionManager;
 import SharedModels.Response;
 import SharedUtility.ResponseStatus;
 import Utility.Command;
@@ -12,7 +11,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class RemoveFirst extends Command {
-    private Connection connection;
+    private final Connection connection;
     public RemoveFirst(Connection connection) {
         super("remove_first", CommandType.REMOVE_FIRST);
         this.connection = connection;
@@ -23,9 +22,11 @@ public class RemoveFirst extends Command {
         try {
             Statement st = connection.createStatement();
             ResultSet rs = st.executeQuery(
-                    "DELETE FROM MusicBand\n" +
-                    "WHERE id = (SELECT MIN(id) FROM MusicBand)\n" +
-                    "RETURNING id;");
+                    """
+                            DELETE FROM MusicBand
+                            WHERE id = (SELECT MIN(id) FROM MusicBand)
+                            RETURNING id;
+                            """);
             if (rs.next() && rs.getLong(1) > 0){
                 return new Response(ResponseStatus.OK, "Группа удалена.");
             }

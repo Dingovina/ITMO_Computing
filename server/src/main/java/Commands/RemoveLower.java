@@ -1,7 +1,5 @@
 package Commands;
 
-import Models.CollectionManager;
-import SharedModels.MusicBand;
 import SharedModels.Response;
 import SharedUtility.ResponseStatus;
 import Utility.Command;
@@ -12,7 +10,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class RemoveLower extends Command {
-    private Connection connection;
+    private final Connection connection;
     public RemoveLower(Connection connection) {
         super("remove_lower", CommandType.REMOVE_LOWER);
         this.connection = connection;
