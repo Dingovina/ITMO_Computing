@@ -17,5 +17,5 @@ public enum CommandType {
     REMOVE_LOWER,
     SHOW,
     UPDATE,
-    SAVE;
+    SAVE
 }

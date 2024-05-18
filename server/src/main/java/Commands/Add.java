@@ -3,13 +3,11 @@ package Commands;
 import SharedModels.MusicBand;
 import SharedModels.Response;
 import SharedUtility.ResponseStatus;
-import Utility.Command;
 import SharedUtility.CommandType;
 import Utility.OwnerCommand;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Add extends OwnerCommand {
     Connection connection;

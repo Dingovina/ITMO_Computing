@@ -44,15 +44,15 @@ public class CollectionManager {
 
     public Response call(Request request){
         for (Command command : publicCommands){
-            if (command.getCommandType().equals(request.getCommandType())){
-                Response r = command.execute(request.getArguments());
+            if (command.getCommandType().equals(request.commandType())){
+                Response r = command.execute(request.arguments());
                 save();
                 return r;
             }
         }
         for (OwnerCommand command : ownerCommands){
-            if (command.getCommandType().equals(request.getCommandType())){
-                Response r = command.execute(request.getArguments(), request.getUsername());
+            if (command.getCommandType().equals(request.commandType())){
+                Response r = command.execute(request.arguments(), request.username());
                 save();
                 return r;
             }

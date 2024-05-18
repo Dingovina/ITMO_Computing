@@ -2,14 +2,11 @@ package Commands;
 
 import SharedModels.Response;
 import SharedUtility.ResponseStatus;
-import Utility.Command;
 import SharedUtility.CommandType;
 import Utility.OwnerCommand;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 public class Clear extends OwnerCommand {

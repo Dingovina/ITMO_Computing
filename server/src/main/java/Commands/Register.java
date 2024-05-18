@@ -14,7 +14,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Register extends OwnerCommand {
-    private Connection connection;
+    private final Connection connection;
     public Register(Connection connection) {
         super("register", CommandType.REGISTER);
         this.connection = connection;

@@ -2,7 +2,6 @@ package Commands;
 
 import SharedModels.Response;
 import SharedUtility.ResponseStatus;
-import Utility.Command;
 import SharedUtility.CommandType;
 import Utility.OwnerCommand;
 

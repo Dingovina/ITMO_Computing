@@ -15,7 +15,7 @@ import java.util.Objects;
 import java.security.MessageDigest;
 
 public class Authorization extends OwnerCommand {
-    private Connection connection;
+    private final Connection connection;
     public Authorization(Connection connection) {
         super("authorization", CommandType.AUTHORIZE);
         this.connection = connection;

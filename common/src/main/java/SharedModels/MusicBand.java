@@ -14,13 +14,13 @@ import java.util.Scanner;
 public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable {
     private Long id; //Поле не может быть null, Значение поля должно быть больше 0, Значение этого поля должно быть уникальным, Значение этого поля должно генерироваться автоматически
     private String name; //Поле не может быть null, Строка не может быть пустой
-    private Coordinates coordinates; //Поле не может быть null
+    private final Coordinates coordinates; //Поле не может быть null
     private ZonedDateTime creationDate; //Поле не может быть null, Значение этого поля должно генерироваться автоматически
     private int numberOfParticipants; //Значение поля должно быть больше 0
     private Long albumsCount; //Поле не может быть null, Значение поля должно быть больше 0
     private String description; //Поле может быть null
     private MusicGenre genre; //Поле не может быть null
-    private Person frontMan; //Поле может быть null
+    private final Person frontMan; //Поле может быть null
 
     private String creator_username;
 
@@ -192,10 +192,6 @@ public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable
 
     public ZonedDateTime getCreationDate() {
         return creationDate;
-    }
-
-    public String getCreator_username() {
-        return creator_username;
     }
 }
 

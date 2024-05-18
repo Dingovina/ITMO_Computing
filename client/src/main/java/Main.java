@@ -75,9 +75,9 @@ public class Main {
                 System.out.println("Некорректная команда.");
                 continue;
             }
-            if (request.getCommandType() == CommandType.EXECUTE_SCRIPT){
+            if (request.commandType() == CommandType.EXECUTE_SCRIPT){
                 boolean ok_flag = true;
-                ArrayList<Request> queue = manager.execute_script((String) request.getArguments().get(0));
+                ArrayList<Request> queue = manager.execute_script((String) request.arguments().get(0));
                 if (Objects.isNull(queue)){
                     System.out.println("Ошибка при попытке выполнения скрипта.");
                     continue;
