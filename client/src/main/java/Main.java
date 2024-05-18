@@ -23,8 +23,6 @@ public class Main {
         Client client = new Client(host, port);
         Scanner input = new Scanner(System.in);
 
-        // TODO: implement creating new user
-
         String username;
         String password;
         System.out.println("Необходима авторизация.");

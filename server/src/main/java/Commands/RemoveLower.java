@@ -18,7 +18,6 @@ public class RemoveLower extends OwnerCommand {
         this.connection = connection;
     }
 
-    // TODO: Remove only user's bands
     @Override
     public Response execute(ArrayList<Object> args, String username) {
         try {

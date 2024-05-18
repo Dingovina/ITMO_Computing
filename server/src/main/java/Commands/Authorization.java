@@ -5,11 +5,14 @@ import SharedUtility.CommandType;
 import SharedUtility.ResponseStatus;
 import Utility.OwnerCommand;
 
+import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Objects;
+import java.security.MessageDigest;
 
 public class Authorization extends OwnerCommand {
     private Connection connection;
@@ -18,11 +21,18 @@ public class Authorization extends OwnerCommand {
         this.connection = connection;
     }
 
-    // TODO: implement password encoding
+    private String encode(String pass) throws NoSuchAlgorithmException {
+        MessageDigest md = MessageDigest.getInstance("SHA-1");
+        byte[] messageDigest = md.digest(pass.getBytes());
+
+        BigInteger no = new BigInteger(1, messageDigest);
+        return no.toString(16);
+    }
+
     @Override
     public Response execute(ArrayList<Object> args, String user) {
         try {
-            String password = args.get(0).toString();
+            String password = encode(args.get(0).toString());
             PreparedStatement st = connection.prepareStatement("""
                     SELECT password FROM users
                     WHERE username = ?;
