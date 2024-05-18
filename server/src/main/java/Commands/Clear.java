@@ -4,12 +4,15 @@ import SharedModels.Response;
 import SharedUtility.ResponseStatus;
 import Utility.Command;
 import SharedUtility.CommandType;
+import Utility.OwnerCommand;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-public class Clear extends Command {
+public class Clear extends OwnerCommand {
 
     private final Connection connection;
     public Clear(Connection connection) {
@@ -18,10 +21,14 @@ public class Clear extends Command {
     }
 
     @Override
-    public Response execute(ArrayList<Object> args) {
+    public Response execute(ArrayList<Object> args, String username) {
         try {
-            Statement st = connection.createStatement();
-            st.execute("DELETE FROM MusicBand;");
+            PreparedStatement st = connection.prepareStatement("""
+                    DELETE FROM MusicBand
+                    WHERE creator = ?;
+                    """);
+            st.setString(1, username);
+            st.execute();
         } catch (Exception e){
             return new Response(ResponseStatus.ERROR, e.getMessage());
         }

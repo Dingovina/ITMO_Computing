@@ -22,6 +22,8 @@ public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable
     private MusicGenre genre; //Поле не может быть null
     private Person frontMan; //Поле может быть null
 
+    private String creator_username;
+
     public MusicBand(){
         id = -1L;
         creationDate = ZonedDateTime.now();
@@ -33,6 +35,7 @@ public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable
         try{
             id = scan.nextLong();
             scan.nextLine();
+            creator_username = scan.nextLine();
             creationDate = ZonedDateTime.of(LocalDateTime.parse(scan.nextLine().split("\\.")[0], DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")), ZoneId.systemDefault());
         } catch (Exception e){
             System.out.println(e.getMessage());
@@ -189,6 +192,10 @@ public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable
 
     public ZonedDateTime getCreationDate() {
         return creationDate;
+    }
+
+    public String getCreator_username() {
+        return creator_username;
     }
 }
 

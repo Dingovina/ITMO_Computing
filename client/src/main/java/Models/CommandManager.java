@@ -18,8 +18,10 @@ public class CommandManager {
     private HashMap<String, Boolean> execution_trace = new HashMap<>();
     private boolean file_mode = false;
     private Scanner file_input;
+    private String username;
 
-    public CommandManager(Scanner input) {
+    public CommandManager(Scanner input, String username) {
+        this.username = username;
         commands_list.add(new Add(input));
         commands_list.add(new Clear());
         commands_list.add(new CountByDescription());
@@ -37,7 +39,7 @@ public class CommandManager {
         commands_list.add(new Update(input));
     }
 
-    public Request call(String user_line) {
+    public Request call(String user_line, String username) {
         user_line += " ";
         String command_name = user_line.split(" ", 2)[0];
         String arguments = user_line.split(" ", 2)[1].trim();
@@ -52,7 +54,7 @@ public class CommandManager {
                         args = command.getArgs(arguments);
                     }
                     Request request;
-                    request = new Request(command.getCommandType(), args);
+                    request = new Request(command.getCommandType(), args, username);
                     if (request.isExit()) exit();
                     else return request;
                 } catch (Exception e) {
@@ -80,7 +82,7 @@ public class CommandManager {
             while (file_input.hasNextLine()) {
                 String user_line = file_input.nextLine();
                 try {
-                    Request request = call(user_line);
+                    Request request = call(user_line, username);
                     if (request.getCommandType() == CommandType.EXECUTE_SCRIPT){
                         ArrayList<Request> new_queue = execute_script((String) request.getArguments().get(0));
                         all_requests.addAll(new_queue);

@@ -7,6 +7,7 @@ import SharedUtility.ResponseStatus;
 import Utility.Command;
 import SharedUtility.MusicGenre;
 import Commands.*;
+import Utility.OwnerCommand;
 
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -15,35 +16,44 @@ public class CollectionManager {
     private PriorityQueue<MusicBand> bands;
     private final ArrayList<String> last_commands = new ArrayList<>();
     private final java.time.ZonedDateTime creationDate;
-    private final ArrayList<Command> commands_list = new ArrayList<>();
+    private final ArrayList<Command> publicCommands = new ArrayList<>();
+    private final ArrayList<OwnerCommand> ownerCommands = new ArrayList<>();
     private final DumpManager dumpManager;
 
     public CollectionManager(DumpManager dumpManager){
         this.dumpManager = dumpManager;
         this.bands = dumpManager.readCollection();
         creationDate = java.time.ZonedDateTime.now();
-        commands_list.add(new Add(dumpManager.getConnection()));
-        commands_list.add(new Clear(dumpManager.getConnection()));
-        commands_list.add(new CountByDescription(this));
-        commands_list.add(new CountLessThanGenre(this));
-        commands_list.add(new Help(this));
-        commands_list.add(new History(this));
-        commands_list.add(new Info(this));
-        commands_list.add(new PrintFieldAscendingDescription(this));
-        commands_list.add(new RemoveById(dumpManager.getConnection()));
-        commands_list.add(new RemoveFirst(dumpManager.getConnection()));
-        commands_list.add(new RemoveLower(dumpManager.getConnection()));
-        commands_list.add(new Save(this));
-        commands_list.add(new Show(this));
-        commands_list.add(new Update(dumpManager.getConnection()));
+        ownerCommands.add(new Register(dumpManager.getConnection()));
+        ownerCommands.add(new Authorization(dumpManager.getConnection()));
+        ownerCommands.add(new Add(dumpManager.getConnection()));
+        ownerCommands.add(new Clear(dumpManager.getConnection()));
+        ownerCommands.add(new RemoveById(dumpManager.getConnection()));
+        ownerCommands.add(new RemoveFirst(dumpManager.getConnection()));
+        ownerCommands.add(new RemoveLower(dumpManager.getConnection()));
+        ownerCommands.add(new Update(dumpManager.getConnection()));
+        publicCommands.add(new CountByDescription(this));
+        publicCommands.add(new CountLessThanGenre(this));
+        publicCommands.add(new Help(this));
+        publicCommands.add(new History(this));
+        publicCommands.add(new Info(this));
+        publicCommands.add(new PrintFieldAscendingDescription(this));
+        publicCommands.add(new Save(this));
+        publicCommands.add(new Show(this));
     }
 
     public Response call(Request request){
-        for (Command command : commands_list){
+        for (Command command : publicCommands){
             if (command.getCommandType().equals(request.getCommandType())){
                 Response r = command.execute(request.getArguments());
                 save();
-
+                return r;
+            }
+        }
+        for (OwnerCommand command : ownerCommands){
+            if (command.getCommandType().equals(request.getCommandType())){
+                Response r = command.execute(request.getArguments(), request.getUsername());
+                save();
                 return r;
             }
         }

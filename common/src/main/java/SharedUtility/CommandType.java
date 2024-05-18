@@ -1,6 +1,8 @@
 package SharedUtility;
 
 public enum CommandType {
+    AUTHORIZE,
+    REGISTER,
     ADD, CLEAR,
     COUNT_BY_DESCRIPTION,
     COUNT_LESS_THAN_GENRE,

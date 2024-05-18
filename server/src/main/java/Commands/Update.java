@@ -5,6 +5,7 @@ import SharedModels.Response;
 import SharedUtility.ResponseStatus;
 import Utility.Command;
 import SharedUtility.CommandType;
+import Utility.OwnerCommand;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
-public class Update extends Command {
+public class Update extends OwnerCommand {
     private final Connection connection;
     public Update(Connection connection) {
         super("update", CommandType.UPDATE);
@@ -20,7 +21,7 @@ public class Update extends Command {
     }
 
     @Override
-    public Response execute(ArrayList<Object> args) {
+    public Response execute(ArrayList<Object> args, String username) {
         try {
             long id = (Long) args.get(0);
             MusicBand band = (MusicBand) args.get(1);
@@ -28,6 +29,7 @@ public class Update extends Command {
                     """
                             UPDATE MusicBand SET name = ?,     coordinate_x = ?,    coordinate_y = ?,    creationDate = ?,    numberOfParticipants = ?,    albumsCount = ?,    description = ?,    genre = ?,    frontMan_name = ?,    frontMan_weight = ?,    frontMan_eyeColor = ?,    frontMan_hairColor = ?,    frontMan_nationality = ?,    frontMan_location_x = ?,    frontMan_location_y = ?,    frontMan_location_name = ?
                             WHERE id = ?
+                            AND creator = ?
                             RETURNING id;"""
             );
             st.setString(1, band.getName());
@@ -47,6 +49,7 @@ public class Update extends Command {
             st.setInt(15, band.getFrontMan().getLocation().getY());
             st.setString(16, band.getFrontMan().getLocation().getName());
             st.setLong(17, id);
+            st.setString(18, username);
             System.out.println(st);
 
             ResultSet rs = st.executeQuery();
