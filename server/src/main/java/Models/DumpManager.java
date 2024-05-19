@@ -22,7 +22,7 @@ private final Connection connection;
             ResultSet data = st.executeQuery("SELECT * FROM MusicBand;");
             while (data.next()) {
                 StringBuilder str_band = new StringBuilder();
-                for (int i = 1; i < 18; ++i){
+                for (int i = 1; i < 19; ++i){
                     str_band.append(data.getString(i)).append("\n");
                 }
                 Scanner in = new Scanner(str_band.toString());

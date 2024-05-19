@@ -2,7 +2,6 @@ package Models;
 
 import Commands.*;
 import SharedModels.Request;
-import SharedModels.Response;
 import SharedUtility.CommandType;
 import Utility.*;
 
@@ -14,12 +13,14 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 public class CommandManager {
-    private ArrayList<Command> commands_list = new ArrayList<>();
-    private HashMap<String, Boolean> execution_trace = new HashMap<>();
+    private final ArrayList<Command> commands_list = new ArrayList<>();
+    private final HashMap<String, Boolean> execution_trace = new HashMap<>();
     private boolean file_mode = false;
     private Scanner file_input;
+    private final String username;
 
-    public CommandManager(Scanner input) {
+    public CommandManager(Scanner input, String username) {
+        this.username = username;
         commands_list.add(new Add(input));
         commands_list.add(new Clear());
         commands_list.add(new CountByDescription());
@@ -37,7 +38,7 @@ public class CommandManager {
         commands_list.add(new Update(input));
     }
 
-    public Request call(String user_line) {
+    public Request call(String user_line, String username) {
         user_line += " ";
         String command_name = user_line.split(" ", 2)[0];
         String arguments = user_line.split(" ", 2)[1].trim();
@@ -52,7 +53,7 @@ public class CommandManager {
                         args = command.getArgs(arguments);
                     }
                     Request request;
-                    request = new Request(command.getCommandType(), args);
+                    request = new Request(command.getCommandType(), args, username);
                     if (request.isExit()) exit();
                     else return request;
                 } catch (Exception e) {
@@ -67,12 +68,9 @@ public class CommandManager {
         ArrayList<Request> all_requests = new ArrayList<>();
         try {
             if (execution_trace.containsKey(file_name) && execution_trace.get(file_name)) {
-//                System.out.println("В процессе выполнения команд из файла была обнаружена рекурсия.");
-//                System.out.println("Выполнение команд из файла остановлено.");
                 return null;
             }
             FileReader fr = new FileReader(file_name);
-//            System.out.println("Начинаю выполнение команд из указанного файла.");
             Scanner file_input = new Scanner(fr);
             this.file_input = file_input;
             file_mode = true;
@@ -80,9 +78,9 @@ public class CommandManager {
             while (file_input.hasNextLine()) {
                 String user_line = file_input.nextLine();
                 try {
-                    Request request = call(user_line);
-                    if (request.getCommandType() == CommandType.EXECUTE_SCRIPT){
-                        ArrayList<Request> new_queue = execute_script((String) request.getArguments().get(0));
+                    Request request = call(user_line, username);
+                    if (request.commandType() == CommandType.EXECUTE_SCRIPT){
+                        ArrayList<Request> new_queue = execute_script((String) request.arguments().get(0));
                         all_requests.addAll(new_queue);
                         this.file_input = file_input;
                     }
@@ -90,8 +88,6 @@ public class CommandManager {
                         all_requests.add(request);
                     }
                 } catch (Exception e) {
-//                    System.out.println("Ошибка во время выполнения команды из файла.");
-//                    System.out.println("Выполнение команд из файла прекращено.");
                     return null;
                 }
             }

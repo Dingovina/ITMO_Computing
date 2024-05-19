@@ -22,20 +22,62 @@ public class Main {
         }
         Client client = new Client(host, port);
         Scanner input = new Scanner(System.in);
-        CommandManager manager = new CommandManager(input);
+
+        String username;
+        String password;
+        System.out.println("Необходима авторизация.");
+        while (true){
+            String user_input;
+            do {
+                System.out.println("Введите 'reg', чтобы создать новый аккаунт.");
+                System.out.println("Введите 'log', чтобы войти в аккаунт.");
+                user_input = input.nextLine();
+            } while (!Objects.equals(user_input, "reg") && !Objects.equals(user_input, "log"));
+            if (Objects.equals(user_input, "log")) {
+                System.out.println("Введите логин:");
+                username = input.nextLine();
+                System.out.println("Введите пароль:");
+                password = input.nextLine();
+                Response resp = client.authorize(username, password);
+                if (resp.getStatus() == ResponseStatus.OK) {
+                    System.out.println(resp.getMessage());
+                    break;
+                } else {
+                    System.out.println("Ошибка при авторизации.");
+                    System.out.println(resp.getMessage());
+                }
+            }
+            else{
+                System.out.println("Введите имя для нового аккаунта:");
+                username = input.nextLine();
+                System.out.println("Введите пароль для нового аккаунта:");
+                password = input.nextLine();
+
+                Response r = client.register(username, password);
+                if (r.getStatus() == ResponseStatus.OK){
+                    System.out.println(r.getMessage());
+                    break;
+                }
+                else {
+                    System.out.println("Ошибка при регистрации.");
+                    System.out.println(r.getMessage());
+                }
+            }
+        }
+        CommandManager manager = new CommandManager(input, username);
 
         System.out.println("Приложение запущено!");
 
         while (true) {
             String user_line = input.nextLine();
-            Request request = manager.call(user_line);
+            Request request = manager.call(user_line, username);
             if (Objects.isNull(request) || !request.isValid()){
                 System.out.println("Некорректная команда.");
                 continue;
             }
-            if (request.getCommandType() == CommandType.EXECUTE_SCRIPT){
+            if (request.commandType() == CommandType.EXECUTE_SCRIPT){
                 boolean ok_flag = true;
-                ArrayList<Request> queue = manager.execute_script((String) request.getArguments().get(0));
+                ArrayList<Request> queue = manager.execute_script((String) request.arguments().get(0));
                 if (Objects.isNull(queue)){
                     System.out.println("Ошибка при попытке выполнения скрипта.");
                     continue;

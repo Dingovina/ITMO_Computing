@@ -2,6 +2,7 @@ package Models;
 
 import SharedModels.Request;
 import SharedModels.Response;
+import SharedUtility.CommandType;
 import SharedUtility.ResponseStatus;
 
 import java.io.IOException;
@@ -9,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class Client {
@@ -33,6 +35,18 @@ public class Client {
         serverReader.close();
         serverWriter = null;
         serverReader = null;
+    }
+
+    public Response authorize(String username, String password){
+        ArrayList<Object> arg = new ArrayList<>();
+        arg.add(password);
+        return sendRequest(new Request(CommandType.AUTHORIZE, arg, username));
+    }
+
+    public Response register(String username, String password){
+        ArrayList<Object> arg = new ArrayList<>();
+        arg.add(password);
+        return sendRequest(new Request(CommandType.REGISTER, arg, username));
     }
 
     public Response sendRequest(Request request){

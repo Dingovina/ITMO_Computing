@@ -3,13 +3,13 @@ package Commands;
 import SharedModels.MusicBand;
 import SharedModels.Response;
 import SharedUtility.ResponseStatus;
-import Utility.Command;
 import SharedUtility.CommandType;
+import Utility.OwnerCommand;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class Add extends Command {
+public class Add extends OwnerCommand {
     Connection connection;
     public Add(Connection connection) {
         super("add", CommandType.ADD);
@@ -17,7 +17,7 @@ public class Add extends Command {
     }
 
     @Override
-    public Response execute(ArrayList<Object> args) {
+    public Response execute(ArrayList<Object> args, String username) {
         try {
             MusicBand band = (MusicBand) args.get(0);
 
@@ -38,8 +38,9 @@ public class Add extends Command {
                                 frontMan_nationality,
                                 frontMan_location_x,
                                 frontMan_location_y,
-                                frontMan_location_name)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                                frontMan_location_name,
+                                creator)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                             RETURNING id;"""
             );
             st.setString(1, band.getName());
@@ -58,6 +59,7 @@ public class Add extends Command {
             st.setLong(14, band.getFrontMan().getLocation().getX());
             st.setInt(15, band.getFrontMan().getLocation().getY());
             st.setString(16, band.getFrontMan().getLocation().getName());
+            st.setString(17, username);
 
             int new_id = -1;
             ResultSet rs = st.executeQuery();
