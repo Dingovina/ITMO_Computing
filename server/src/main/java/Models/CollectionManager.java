@@ -46,6 +46,7 @@ public class CollectionManager {
         for (Command command : publicCommands){
             if (command.getCommandType().equals(request.commandType())){
                 Response r = command.execute(request.arguments());
+                last_commands.add(command.getName());
                 save();
                 return r;
             }
@@ -53,6 +54,9 @@ public class CollectionManager {
         for (OwnerCommand command : ownerCommands){
             if (command.getCommandType().equals(request.commandType())){
                 Response r = command.execute(request.arguments(), request.username());
+                if (!Objects.equals(command.getName(), "authorization") && !Objects.equals(command.getName(), "register")) {
+                    last_commands.add(command.getName());
+                }
                 save();
                 return r;
             }
@@ -61,7 +65,6 @@ public class CollectionManager {
     }
 
     public Response help(){
-        last_commands.add("help");
         String message = "";
         message += """
                 Список доступных команд:
@@ -84,8 +87,6 @@ public class CollectionManager {
     }
 
     public Response info(){
-        last_commands.add("info");
-
         String message = "";
         message += "Коллекция содержит объекты типа MusicBand.\n";
         message += "Объекты хранятся в виде java.util.PriorityQueue\n";
@@ -96,7 +97,6 @@ public class CollectionManager {
     }
 
     public Response show(){
-        last_commands.add("show");
         StringBuilder message = new StringBuilder();
 
         message.append("Содержимое коллекции: \n");
@@ -125,12 +125,10 @@ public class CollectionManager {
                 message.append(last_commands.get(i)).append("\n");
             }
         }
-        last_commands.add("history");
         return new Response(ResponseStatus.OK, message.toString());
     }
 
     public Response count_by_description(String description){
-        last_commands.add("count_by_description");
         String message = "";
 
         int result = 0;
@@ -145,7 +143,6 @@ public class CollectionManager {
     }
 
     public Response count_less_than_genre(MusicGenre genre){
-        last_commands.add("count_less_than_genre");
         String message = "";
 
         int result = 0;
@@ -158,7 +155,6 @@ public class CollectionManager {
     }
 
     public Response print_field_ascending_description(){
-        last_commands.add("print_field_ascending_description");
         StringBuilder message = new StringBuilder();
 
         ArrayList<String> all_descriptions = new ArrayList<>();

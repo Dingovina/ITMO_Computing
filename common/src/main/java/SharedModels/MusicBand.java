@@ -159,6 +159,7 @@ public class MusicBand implements Comparable<MusicBand>, Inputable, Serializable
                 "\"description\": \"" + description + "\",\n" +
                 "\"genre\": \"" + genre + "\",\n" +
                 "\"frontMan\": " + frontMan + "\n" +
+                "\"creator\": " + creator_username + "\n" +
                 "}";
     }
 
